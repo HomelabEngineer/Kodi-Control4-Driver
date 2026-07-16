@@ -5,3 +5,6 @@
 # Built driver package artifacts
 *.c4z
 dist/
+
+# Squished driver output
+driver.lua.squished

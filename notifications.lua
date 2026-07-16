@@ -1,6 +1,23 @@
 local Notifications = {}
 
-function Notifications.createHandlers(context)
+-- Kodi reports one player per active stream. Video wins outright; audio only
+-- counts when no video player is present. Anything else (e.g. pictures) is not
+-- playback as far as this driver is concerned.
+local function parseActivePlayers(players)
+  if type(players) ~= "table" then return nil, nil end
+
+  local playerId, playbackType
+  for _, p in ipairs(players) do
+    if p.type == "video" then
+      return p.playerid, "video"
+    elseif p.type == "audio" and playbackType == nil then
+      playerId, playbackType = p.playerid, "audio"
+    end
+  end
+  return playerId, playbackType
+end
+
+function Notifications.create(context)
   local state = assert(context.state, "state is required")
   local kodiRpc = assert(context.kodiRpc, "kodiRpc is required")
   local updateProperty = assert(context.updateProperty, "updateProperty is required")
@@ -18,26 +35,21 @@ function Notifications.createHandlers(context)
 
 
   local function refreshPlaybackState(afterFn)
-    kodiRpc:sendRequest("Player.GetActivePlayers", {}, function(players)
-      local any = false
-      local pType = nil
-
-      if type(players) == "table" then
-        for _, p in ipairs(players) do
-          any = true
-          if p.type == "video" then
-            pType = "video"
-            break
-          elseif p.type == "audio" then
-            pType = pType or "audio"
-          end
-        end
+    kodiRpc:sendRequest("Player.GetActivePlayers", {}, function(players, err)
+      -- A timeout, cancel, or JSON-RPC error yields a nil result. Treating that
+      -- as "no active players" would wrongly clear playbackType mid-playback --
+      -- flipping the directionals out of playback mode and, on OnStop, firing
+      -- Auto Room Off on a room that is still watching something.
+      if err then
+        logDebug("Player.GetActivePlayers failed; leaving playback state unchanged")
+        return
       end
 
-      state.isInPlayback = any
+      local playerId, pType = parseActivePlayers(players)
+      state.playerId = playerId
       state.playbackType = pType
 
-      if afterFn then afterFn(any, pType) end
+      if afterFn then afterFn(pType) end
     end)
   end
 
@@ -46,7 +58,7 @@ function Notifications.createHandlers(context)
 
     local wasInVideo = (state.playbackType == "video")
 
-    refreshPlaybackState(function(_, pType)
+    refreshPlaybackState(function(pType)
       -- Only treat VIDEO as "playback mode" for UI + auto room + AV details.
       if pType ~= "video" then
         return
@@ -68,7 +80,7 @@ function Notifications.createHandlers(context)
   handlers["Player.OnPause"] = function(_)
     logDebug("Player.OnPause notification")
 
-    refreshPlaybackState(function(_, pType)
+    refreshPlaybackState(function(pType)
       if pType == "video" then
         updateProperty("Player State", "Paused")
       end
@@ -78,7 +90,7 @@ function Notifications.createHandlers(context)
   handlers["Player.OnResume"] = function(_)
     logDebug("Player.OnResume notification")
 
-    refreshPlaybackState(function(_, pType)
+    refreshPlaybackState(function(pType)
       if pType == "video" then
         updateProperty("Player State", "Playing")
       end
@@ -90,7 +102,7 @@ function Notifications.createHandlers(context)
 
     local wasInVideo = (state.playbackType == "video")
 
-    refreshPlaybackState(function(_, pType)
+    refreshPlaybackState(function(pType)
       -- Only consider "stop" as end-of-session when VIDEO playback ended.
       if wasInVideo and pType ~= "video" then
         avDetails:clear()
@@ -128,12 +140,15 @@ function Notifications.createHandlers(context)
 
   handlers["Player.OnAVStart"] = function(_)
     logDebug("Player.OnAVStart notification")
-    refreshPlaybackState(function(_, _)
+    refreshPlaybackState(function(_)
       avDetails:scheduleUpdate()
     end)
   end
 
-  return handlers
+  return {
+    handlers = handlers,
+    refreshPlaybackState = refreshPlaybackState,
+  }
 end
 
 return Notifications

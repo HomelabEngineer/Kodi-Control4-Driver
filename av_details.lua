@@ -72,6 +72,7 @@ end
 
 function AvDetails:requestNow()
   if self.inFlight then
+    -- Coalesce: the in-flight response reschedules once it lands.
     self.needsRefresh = true
     return
   end
@@ -82,34 +83,29 @@ function AvDetails:requestNow()
   self.logDebug("Requesting AV details")
 
   local sent = self.kodiRpc:sendInfoLabelsRequest(AV_DETAILS_LABELS, function(result, err)
-    self.inFlight = false
+    -- gen only changes in clear(), so a mismatch means this response belongs to
+    -- a finished playback session. Return without touching inFlight: it now
+    -- belongs to whatever request came after the clear().
     if myGen ~= self.gen then return end
+    self.inFlight = false
+
     if err then
       self.logDebug("GetInfoLabels failed: " .. tostring(err))
-      if self.needsRefresh then
-        self:scheduleUpdate()
+    else
+      local videoDetails, audioDetails = buildAvDetails(result)
+      if videoDetails and audioDetails then
+        self.updateProperty("Video Details", videoDetails)
+        self.updateProperty("Audio Details", audioDetails)
+        self.logDebug("Video Details: " .. videoDetails)
+        self.logDebug("Audio Details: " .. audioDetails)
+      else
+        self.logDebug("GetInfoLabels returned invalid data")
       end
-      return
     end
-
-    local videoDetails, audioDetails = buildAvDetails(result)
-    if not videoDetails or not audioDetails then
-      self.logDebug("GetInfoLabels returned invalid data")
-      if self.needsRefresh then
-        self:scheduleUpdate()
-      end
-      return
-    end
-
-    self.updateProperty("Video Details", videoDetails)
-    self.updateProperty("Audio Details", audioDetails)
 
     if self.needsRefresh then
       self:scheduleUpdate()
     end
-
-    self.logDebug("Video Details: " .. videoDetails)
-    self.logDebug("Audio Details: " .. audioDetails)
   end)
 
   if not sent then
@@ -118,13 +114,15 @@ function AvDetails:requestNow()
 end
 
 function AvDetails:scheduleUpdate()
-  self.gen = self.gen + 1
+  -- Deliberately does not bump gen: gen tracks playback sessions, not
+  -- individual updates. Bumping it here would strand an in-flight request's
+  -- needsRefresh retry behind the staleness guard and leave inFlight stuck on.
   local myGen = self.gen
 
   self.cancelTimer(self.timerId)
   self.timerId = self.setTimer(self.debounceMs, function()
     self.timerId = nil
-    if myGen ~= self.gen then return end  -- stale callback, ignore
+    if myGen ~= self.gen then return end  -- cleared while debouncing
     self:requestNow()
   end)
 end

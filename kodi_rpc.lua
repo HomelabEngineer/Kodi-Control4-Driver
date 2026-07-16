@@ -18,7 +18,7 @@ function KodiRpc:new(options)
   instance.callbackTimeoutMs = options.callbackTimeoutMs or 10000
   instance.logDebug = options.logDebug or function(_) end
   instance.logInfo = options.logInfo or function(_) end
-  instance.isConnectedFn = options.isConnectedFn
+  instance.isConnectedFn = assert(options.isConnectedFn, "isConnectedFn is required")
   instance.onTransportError = options.onTransportError
   instance.webSocket = nil
   instance.nextRequestId = 0
@@ -32,10 +32,7 @@ function KodiRpc:setWebSocket(webSocket)
 end
 
 function KodiRpc:isConnected()
-  if self.isConnectedFn then
-    return self.isConnectedFn()
-  end
-  return self.webSocket and self.webSocket.running
+  return self.isConnectedFn()
 end
 
 function KodiRpc:clearPendingCallbacks()
@@ -94,27 +91,41 @@ function KodiRpc:_failTransport(why)
 end
 
 function KodiRpc:_safeSend(payload, context)
-  if not self.webSocket then
+  local webSocket = self.webSocket
+  if not webSocket then
     self:_failTransport("no_websocket")
     return false
   end
 
-  local ok, retOrErr = pcall(function()
-    return self.webSocket:Send(payload)
-  end)
-
-  if not ok then
-    self:_failTransport("send_exception:" .. tostring(retOrErr))
+  -- wsObject:Send silently discards the payload when the socket is not
+  -- connected, and returns the socket either way, so a failed send is only
+  -- detectable up front.
+  if not webSocket.connected then
+    self:_failTransport("socket_not_connected:" .. tostring(context))
     return false
   end
 
-  -- Some libs return nil/false on failure; treat that as failure too.
-  if retOrErr == nil or retOrErr == false then
-    self:_failTransport("send_failed:" .. tostring(context))
+  local ok, err = pcall(function()
+    webSocket:Send(payload)
+  end)
+
+  if not ok then
+    self:_failTransport("send_exception:" .. tostring(err))
     return false
   end
 
   return true
+end
+
+-- Drop a pending callback and report the failure to its owner.
+function KodiRpc:_abortCallback(requestId, reason)
+  local key = tostring(requestId)
+  local entry = self.pendingCallbacks[key]
+  if type(entry) == "table" and entry.timerId then
+    cancelTimerHandle(entry.timerId)
+  end
+  self.pendingCallbacks[key] = nil
+  self:_completeCallback(entry, nil, reason)
 end
 
 function KodiRpc:sendRequest(method, params, callback)
@@ -135,15 +146,9 @@ function KodiRpc:sendRequest(method, params, callback)
 
   self:_registerCallback(requestId, method, callback)
   self.logDebug("Sending: " .. method .. " (id=" .. requestId .. ")")
-  local ok = self:_safeSend(self.jsonEncode(request), method)
-  if not ok then
-    local key = tostring(requestId)
-    local entry = self.pendingCallbacks[key]
-    if type(entry) == "table" and entry.timerId then
-      cancelTimerHandle(entry.timerId)
-    end
-    self.pendingCallbacks[key] = nil
-    self:_completeCallback(entry, nil, "send_failed")
+
+  if not self:_safeSend(self.jsonEncode(request), method) then
+    self:_abortCallback(requestId, "send_failed")
     return false
   end
 
@@ -179,15 +184,8 @@ function KodiRpc:sendInfoLabelsRequest(labels, callback)
   local json = self:_buildGetInfoLabelsJson(requestId, labels)
   self.logDebug("Sending: XBMC.GetInfoLabels (id=" .. requestId .. ")")
 
-  local ok = self:_safeSend(json, "GetInfoLabels")
-  if not ok then
-    local key = tostring(requestId)
-    local entry = self.pendingCallbacks[key]
-    if type(entry) == "table" and entry.timerId then
-      cancelTimerHandle(entry.timerId)
-    end
-    self.pendingCallbacks[key] = nil
-    self:_completeCallback(entry, nil, "send_failed")
+  if not self:_safeSend(json, "GetInfoLabels") then
+    self:_abortCallback(requestId, "send_failed")
     return false
   end
 

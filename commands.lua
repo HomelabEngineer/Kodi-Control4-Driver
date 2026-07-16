@@ -94,8 +94,14 @@ function Commands.createHandlers(context)
   end
 
   local function setPlayerSpeed(speed)
-    kodiRpc:sendRequest("Player.SetSpeed", { playerid = 0, speed = speed })
-    kodiRpc:sendRequest("Player.SetSpeed", { playerid = 1, speed = speed })
+    -- state.playerId is tracked from Player.GetActivePlayers; guessing at both
+    -- playerid 0 and 1 guaranteed a JSON-RPC error on every press.
+    local playerId = state.playerId
+    if not playerId then
+      logInfo("Ignoring speed change: no active player")
+      return
+    end
+    kodiRpc:sendRequest("Player.SetSpeed", { playerid = playerId, speed = speed })
   end
 
   handlers.UP = function()
