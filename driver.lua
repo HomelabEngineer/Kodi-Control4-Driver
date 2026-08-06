@@ -103,12 +103,52 @@ local function setWsStatus(connected, connecting)
   )
 end
 
--- Bindings can survive a driver reload with an address still set, which would
--- push the library's 6100-6199 scan onto a fresh binding every restart.
-local function clearStaleWebSocketBindingAddresses()
-  for bindingId = 6100, 6199 do
-    pcall(C4.SetBindingAddress, C4, bindingId, "")
+-- websocket.lua allocates a net binding by scanning 6100-6199 for the first one
+-- with an empty address. That range is shared by every driver built on the
+-- library, so it must never be cleared wholesale: blanking a binding that
+-- another driver's live socket is using leaves that socket connecting to
+-- 0.0.0.0:0 on its ping/close cycle forever, and the owning driver only escapes
+-- by tearing the socket down and rebuilding it.
+--
+-- Only this driver's own binding is ours to release. The library clears it on
+-- the normal teardown path, so this covers the case it cannot: a reload where
+-- OnDriverDestroyed never ran.
+-- Stored as "<bindingId>|<address>". The address is what makes this safe to act
+-- on: after a clean teardown the library frees the binding and another driver
+-- may already have claimed it, so releasing purely by id could blank a binding
+-- that is no longer ours. Only clear it if it still carries the address we set.
+local PERSIST_KEY_WS_BINDING = "ws_binding"
+
+local function rememberWebSocketBinding(bindingId, address)
+  if type(bindingId) == "number" and type(address) == "string" and address ~= "" then
+    pcall(C4.PersistSetValue, C4, PERSIST_KEY_WS_BINDING, bindingId .. "|" .. address)
   end
+end
+
+local function forgetWebSocketBinding()
+  pcall(C4.PersistSetValue, C4, PERSIST_KEY_WS_BINDING, "")
+end
+
+local function releaseOwnWebSocketBinding()
+  local ok, stored = pcall(C4.PersistGetValue, C4, PERSIST_KEY_WS_BINDING)
+  if not ok or type(stored) ~= "string" then return end
+
+  local id, address = stored:match("^(%d+)|(.+)$")
+  local bindingId = tonumber(id)
+  if not bindingId or bindingId < 6100 or bindingId > 6199 then
+    forgetWebSocketBinding()
+    return
+  end
+
+  local gotAddress, current = pcall(C4.GetBindingAddress, C4, bindingId)
+  if gotAddress and current == address then
+    logInfo("Releasing web socket binding " .. bindingId .. " left over from a previous load")
+    pcall(C4.SetBindingAddress, C4, bindingId, "")
+  else
+    logDebug("Binding " .. bindingId .. " is no longer ours; leaving it alone")
+  end
+
+  forgetWebSocketBinding()
 end
 
 local function disconnectWebSocket(reason)
@@ -292,6 +332,10 @@ connectKodiWebSocket = function()
   ws.ping_interval = WEBSOCKET_PING_INTERVAL_SECONDS
   ws.pong_response_interval = WEBSOCKET_PONG_TIMEOUT_SECONDS
 
+  -- Record which binding the library claimed, so a load that never reaches
+  -- OnDriverDestroyed can release exactly this one and nothing else.
+  rememberWebSocketBinding(ws.netBinding, ipAddress)
+
   state.webSocket = ws
   kodiRpc:setWebSocket(ws)
 
@@ -334,7 +378,7 @@ end
 function OnDriverInit()
   logInfo("Driver initialized")
   state.isShuttingDown = false
-  clearStaleWebSocketBindingAddresses()
+  releaseOwnWebSocketBinding()
   loadDirectionalsModeFromProperties()
   connectKodiWebSocket()
 end
@@ -345,6 +389,10 @@ function OnDriverDestroyed()
   state.reconnectTimerId = cancelTimer(state.reconnectTimerId)
   avDetails:clear()
   disconnectWebSocket("driver_destroyed")
+  -- delete() hands the binding back on its own timer, so there is nothing left
+  -- for the next load to clean up. Drop the record rather than let it point at
+  -- a binding some other driver will have claimed by then.
+  forgetWebSocketBinding()
 end
 
 function OnPropertyChanged(propertyName)

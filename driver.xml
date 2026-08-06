@@ -5,8 +5,8 @@
   <name>Kodi IP Control</name>
   <model>Kodi v21+</model>
   <created>12/28/2024 12:00 PM</created>
-  <modified>07/16/2026 12:00 PM</modified>
-  <version>27</version>
+  <modified>08/06/2026 03:10 PM</modified>
+  <version>28</version>
   <control>lua_gen</control>
   <controlmethod>ip</controlmethod>
   <driver>DriverWorks</driver>
