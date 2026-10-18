@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Kodi (Open Source)</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.5;margin:24px;max-width:46em;color:#222}
+h1{font-size:1.5em}h2{font-size:1.15em;margin-top:1.6em;border-bottom:1px solid #ddd}
+code{background:#f3f3f3;padding:1px 4px;border-radius:3px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:4px 8px;text-align:left;vertical-align:top}
+</style></head>
+<body>
+<h1>Kodi (Open Source)</h1>
+<p>IP control for Kodi 19+ over Kodi's JSON-RPC WebSocket (port 9090), with real-time playback status, the full remote/D-pad command set, and a link for the companion <b>Kodi Movies</b> driver, which browses the Kodi movie library on Navigators and Halo remotes and plays the selected movie.</p>
+
+<h2>Kodi setup</h2>
+<ol>
+<li>Kodi &rarr; Settings &rarr; Services &rarr; Control: turn on <b>Allow remote control via HTTP</b> and <b>Allow remote control from applications on other systems</b>.</li>
+<li>Note the web server <b>port</b> (default 8080), <b>username</b> and <b>password</b>. Kodi Movies reads the library and artwork through the web server.</li>
+<li>Give the Kodi device a fixed IP address (DHCP reservation).</li>
+</ol>
+
+<h2>Composer setup</h2>
+<ol>
+<li>Add this driver. Two devices appear: <b>Kodi</b> (the media player rooms select) and <b>Kodi Virtual Switcher</b> (plumbing, hidden from rooms).</li>
+<li>Set <b>IP Address</b>, <b>Kodi HTTP Port</b>, <b>Kodi Username</b> and <b>Kodi Password</b>.</li>
+<li>Connections &rarr; bind <b>Kodi Virtual Switcher &rarr; HDMI OUTPUT</b> to the TV or AVR input Kodi is plugged into. (This replaces the media player's own HDMI output in the original driver; the internal links between the player and the switcher bind themselves.)</li>
+<li>Add the room's video endpoint as usual so <b>Kodi</b> appears under Watch.</li>
+<li>Optional: add <b>Kodi Movies</b>. Its links to this driver normally bind automatically. If not, bind <b>Kodi Movies &rarr; Kodi Player</b> to this driver's <b>Kodi Library Control</b>, and the Kodi Movies <b>Link</b> and <b>AV</b> connections to the Virtual Switcher's <b>Kodi Movies Link</b> and <b>Kodi Movies AV</b>. The <b>Library Link</b> property shows the result.</li>
+</ol>
+
+<h2>What happens when a movie is picked in Kodi Movies</h2>
+<ol>
+<li>This driver selects <b>Kodi</b> as the video source in the Navigator's room, so the room turns on the TV/AVR and switches inputs the normal Control4 way.</li>
+<li>While that launch is in progress, the room's <code>ON</code> does not send Kodi Home or start PM4K.</li>
+<li>After <b>Play Delay After Room On</b> (skipped if the room is already on Kodi) and once the WebSocket is connected, the movie is opened with <code>Player.Open</code>, resuming or starting over per <b>Resume Behavior</b>.</li>
+<li>If Kodi cannot be reached within <b>Library Play Timeout</b>, the Navigator is told the movie could not start.</li>
+</ol>
+
+<h2>Properties</h2>
+<table>
+<tr><th>Property</th><th>Notes</th></tr>
+<tr><td>IP Address / Kodi WebSocket Port</td><td>Control connection (default 9090).</td></tr>
+<tr><td>Kodi HTTP Port / Username / Password</td><td>Passed to Kodi Movies for library and artwork requests.</td></tr>
+<tr><td>Playback Directionals</td><td>PM4K: normal navigation during playback. Kodi: Up/Down = &plusmn;10 min, Left/Right = &plusmn;10 s, Enter = OSD.</td></tr>
+<tr><td>Startup Action on ON</td><td>Kodi Home, Open Movies Library, Launch PM4K, or Do Nothing.</td></tr>
+<tr><td>Skip Interval</td><td>&lt;30 s small step, 30&ndash;599 s step, &ge;600 s big step.</td></tr>
+<tr><td>Program A&ndash;D Buttons</td><td>Red/Green/Yellow/Blue actions.</td></tr>
+<tr><td>Auto Room On / Off</td><td>Turn the room on when video starts on Kodi / off when it stops.</td></tr>
+<tr><td>Stop Playback When Room Turns Off</td><td>Stops Kodi when the room is turned off.</td></tr>
+<tr><td>Turn Room On When Playing From Library</td><td>ON: picking a movie in Kodi Movies selects Kodi in that room first.</td></tr>
+<tr><td>Play Delay After Room On</td><td>Seconds to let the TV/AVR settle before playback (default 4).</td></tr>
+<tr><td>Library Play Timeout</td><td>How long to wait for Kodi to become reachable (default 90 s).</td></tr>
+<tr><td>Resume Behavior</td><td>Default for Kodi Movies' <i>Play</i>. <i>Resume</i> and <i>Play From Beginning</i> actions override it.</td></tr>
+<tr><td>Status (read-only)</td><td>WebSocket Status, Kodi Version, Library Link, Player State, Now Playing, Media Type, Video/Audio Details.</td></tr>
+</table>
+
+<h2>Programming</h2>
+<p><b>Events:</b> Playback Started, Paused, Resumed, Stopped, Ended, Library Movie Launched &mdash; e.g. dim the lights when a movie starts.</p>
+<p><b>Commands:</b> Kodi Action (any Kodi action name such as <code>osd</code>), Show Notification, Open Movies Library, Scan Video Library.</p>
+<p><b>Actions:</b> Reconnect / Disconnect WebSocket, Scan Kodi Video Library, Refresh Linked Kodi Movies.</p>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><b>WebSocket Status stays Disconnected:</b> check the IP, that Kodi is running, and the "applications on other systems" setting. Turn on Debug Mode and watch the Lua output.</li>
+<li><b>Room turns on but the movie doesn't start:</b> raise Play Delay After Room On (some TVs drop the first seconds of HDMI), and check Library Play Timeout.</li>
+<li><b>Kodi Movies says "Not linked":</b> see Composer setup step 5.</li>
+</ul>
+
+<p style="color:#666;margin-top:2em">Open source (MIT). WebSocket control core derived from the MIT-licensed Kodi-Control4-Driver by bmrowe. Not affiliated with or endorsed by the Kodi Foundation or Snap One.</p>
+</body>
+</html>
