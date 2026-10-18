@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devicedata>
+  <copyright>Open Source (MIT License)</copyright>
+  <creator>Open Source</creator>
+  <manufacturer>Kodi</manufacturer>
+  <name>Kodi Movies</name>
+  <model>Kodi Movies (Open Source)</model>
+  <created>10/18/2026 12:00 PM</created>
+  <modified>10/18/2026 12:00 PM</modified>
+  <version>100</version>
+  <control>lua_gen</control>
+  <driver>DriverWorks</driver>
+  <minimum_os_version>3.1.0</minimum_os_version>
+  <small image_source="c4z">icons/device_sm.png</small>
+  <large image_source="c4z">icons/device_lg.png</large>
+  <composer_categories>
+    <category>media_player</category>
+  </composer_categories>
+
+  <proxies qty="1">
+    <proxy proxybindingid="5001" name="Kodi Movies" image_source="c4z" small_image="icons/device_sm.png" large_image="icons/device_lg.png">media_service</proxy>
+  </proxies>
+
+  <capabilities>
+    <hide_in_list_nav>False</hide_in_list_nav>
+    <hide_in_media>True</hide_in_media>
+    <digital_audio_support>False</digital_audio_support>
+    <can_scan_media>False</can_scan_media>
+    <media_type>2</media_type>
+    <!-- Opening Kodi Movies only browses. The room is switched to Kodi when a movie is picked. -->
+    <ui_selects_device>False</ui_selects_device>
+    <list_nowplaying_non_c4>True</list_nowplaying_non_c4>
+    <list_no_nowplaying>True</list_no_nowplaying>
+
+    <navigator_display_option proxybindingid="5001">
+      <display_icons>
+        <Icon width="20" height="20">controller://driver/kodi_os_movies/icons/device_20.png</Icon>
+        <Icon width="30" height="30">controller://driver/kodi_os_movies/icons/device_30.png</Icon>
+        <Icon width="40" height="40">controller://driver/kodi_os_movies/icons/device_40.png</Icon>
+        <Icon width="50" height="50">controller://driver/kodi_os_movies/icons/device_50.png</Icon>
+        <Icon width="60" height="60">controller://driver/kodi_os_movies/icons/device_60.png</Icon>
+        <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/device_70.png</Icon>
+        <Icon width="80" height="80">controller://driver/kodi_os_movies/icons/device_80.png</Icon>
+        <Icon width="90" height="90">controller://driver/kodi_os_movies/icons/device_90.png</Icon>
+        <Icon width="100" height="100">controller://driver/kodi_os_movies/icons/device_100.png</Icon>
+        <Icon width="110" height="110">controller://driver/kodi_os_movies/icons/device_110.png</Icon>
+        <Icon width="120" height="120">controller://driver/kodi_os_movies/icons/device_120.png</Icon>
+        <Icon width="130" height="130">controller://driver/kodi_os_movies/icons/device_130.png</Icon>
+        <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/device_140.png</Icon>
+        <Icon width="300" height="300">controller://driver/kodi_os_movies/icons/device_300.png</Icon>
+      </display_icons>
+    </navigator_display_option>
+
+    <UI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" proxybindingid="5001">
+      <DeviceIcon>device</DeviceIcon>
+      <BrandingIcon>branding</BrandingIcon>
+
+      <Icons>
+        <IconGroup id="device">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/device_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/device_140.png</Icon>
+          <Icon width="300" height="300">controller://driver/kodi_os_movies/icons/device_300.png</Icon>
+        </IconGroup>
+        <IconGroup id="branding">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/branding_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/branding_140.png</Icon>
+          <Icon width="300" height="300">controller://driver/kodi_os_movies/icons/branding_300.png</Icon>
+        </IconGroup>
+        <IconGroup id="tab_movies">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/tab_movies_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/tab_movies_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="tab_recent">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/tab_recent_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/tab_recent_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="tab_continue">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/tab_continue_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/tab_continue_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="tab_genres">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/tab_genres_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/tab_genres_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="tab_more">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/tab_more_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/tab_more_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="act_play">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/act_play_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/act_play_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="act_restart">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/act_restart_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/act_restart_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="act_info">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/act_info_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/act_info_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="act_watched">
+          <Icon width="70" height="70">controller://driver/kodi_os_movies/icons/act_watched_70.png</Icon>
+          <Icon width="140" height="140">controller://driver/kodi_os_movies/icons/act_watched_140.png</Icon>
+        </IconGroup>
+      </Icons>
+
+      <Tabs>
+        <Tab>
+          <Id>Movies</Id>
+          <Name>Movies</Name>
+          <IconId>tab_movies</IconId>
+          <ScreenId>MoviesScreen</ScreenId>
+        </Tab>
+        <Tab>
+          <Id>Recent</Id>
+          <Name>Recent</Name>
+          <IconId>tab_recent</IconId>
+          <ScreenId>RecentScreen</ScreenId>
+        </Tab>
+        <Tab>
+          <Id>Continue</Id>
+          <Name>Continue</Name>
+          <IconId>tab_continue</IconId>
+          <ScreenId>ContinueScreen</ScreenId>
+        </Tab>
+        <Tab>
+          <Id>Genres</Id>
+          <Name>Genres</Name>
+          <IconId>tab_genres</IconId>
+          <ScreenId>GenresScreen</ScreenId>
+        </Tab>
+        <Tab>
+          <Id>More</Id>
+          <Name>More</Name>
+          <IconId>tab_more</IconId>
+          <ScreenId>MoreScreen</ScreenId>
+        </Tab>
+      </Tabs>
+
+      <Screens>
+        <Screen xsi:type="ListScreenType">
+          <Id>MoviesScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+              <Param><Name>start</Name><Type>DATA_OFFSET</Type></Param>
+              <Param><Name>count</Name><Type>DATA_COUNT</Type></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>OFFSET</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>RecentScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>NONE</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>ContinueScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>NONE</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>GenresScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>NONE</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>MoreScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>NONE</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseScreen</Id>
+          <DataCommand>
+            <Name>Browse</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>screenDepth</Name><Type>SYSTEM</Type><Value>screenDepth</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+              <Param><Name>start</Name><Type>DATA_OFFSET</Type></Param>
+              <Param><Name>count</Name><Type>DATA_COUNT</Type></Param>
+            </Params>
+          </DataCommand>
+          <RequiresRefresh>true</RequiresRefresh>
+          <PaginationStyle>OFFSET</PaginationStyle>
+          <List>
+            <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+            <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+            <TitleProperty>title</TitleProperty>
+            <SubTitleProperty>subtitle</SubTitleProperty>
+            <ImageProperty>image_list</ImageProperty>
+            <LengthProperty>duration</LengthProperty>
+            <IsLink><Property>isLink</Property><ValidValues><Value>true</Value></ValidValues></IsLink>
+            <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="DetailScreenType">
+          <Id>DetailsScreen</Id>
+          <DataCommand>
+            <Name>GetDetails</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </DataCommand>
+          <DefaultActionProperty>default_action</DefaultActionProperty>
+          <TitleProperty>title</TitleProperty>
+          <SubTitleProperty>subtitle</SubTitleProperty>
+          <ImageProperty>image</ImageProperty>
+          <AttributionImage>attribution_image</AttributionImage>
+          <YearProperty>release_date</YearProperty>
+          <RatingProperty>rating</RatingProperty>
+          <LengthProperty>duration</LengthProperty>
+          <Paragraph>
+            <HeaderTxt>Plot</HeaderTxt>
+            <ContentProperty>description</ContentProperty>
+          </Paragraph>
+        </Screen>
+      </Screens>
+
+      <NowPlaying>
+        <List>
+          <ItemDefaultActionProperty>default_action</ItemDefaultActionProperty>
+          <ItemActionIdsProperty>actions_list</ItemActionIdsProperty>
+          <TitleProperty>title</TitleProperty>
+          <SubTitleProperty>subtitle</SubTitleProperty>
+          <ImageProperty>image_list</ImageProperty>
+          <LengthProperty>duration</LengthProperty>
+          <IsHeader><Property>isHeader</Property><ValidValues><Value>true</Value></ValidValues></IsHeader>
+        </List>
+      </NowPlaying>
+
+      <Actions>
+        <Action>
+          <Id>SelectItem</Id>
+          <Name>Open</Name>
+          <Command>
+            <Name>SelectItem</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>PlayMovie</Id>
+          <Name>Play</Name>
+          <IconId>act_play</IconId>
+          <Command>
+            <Name>PlayMovie</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>ResumeMovie</Id>
+          <Name>Resume</Name>
+          <IconId>act_play</IconId>
+          <Command>
+            <Name>ResumeMovie</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>RestartMovie</Id>
+          <Name>Play From Beginning</Name>
+          <IconId>act_restart</IconId>
+          <Command>
+            <Name>RestartMovie</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>ViewDetails</Id>
+          <Name>Details</Name>
+          <IconId>act_info</IconId>
+          <Command>
+            <Name>ViewDetails</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>MarkWatched</Id>
+          <Name>Mark as Watched</Name>
+          <IconId>act_watched</IconId>
+          <Command>
+            <Name>MarkWatched</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>MarkUnwatched</Id>
+          <Name>Mark as Unwatched</Name>
+          <IconId>act_watched</IconId>
+          <Command>
+            <Name>MarkUnwatched</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>RetryLoad</Id>
+          <Name>Try Again</Name>
+          <Command>
+            <Name>RetryLoad</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param><Name>screenId</Name><Type>SYSTEM</Type><Value>screenId</Value></Param>
+              <Param><Name>tabId</Name><Type>SYSTEM</Type><Value>tabId</Value></Param>
+              <Param><Name>id</Name><Type>FIRST_SELECTED</Type><Value>id</Value></Param>
+              <Param><Name>itemType</Name><Type>FIRST_SELECTED</Type><Value>itemType</Value></Param>
+            </Params>
+          </Command>
+        </Action>
+      </Actions>
+    </UI>
+  </capabilities>
+
+  <connections>
+    <connection>
+      <id>5001</id>
+      <facing>6</facing>
+      <type>2</type>
+      <connectionname>Kodi Movies</connectionname>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>False</linelevel>
+      <classes>
+        <class><classname>MediaService</classname></class>
+      </classes>
+    </connection>
+    <!--
+      Route to the room through the Kodi driver's virtual switcher, the same way
+      shipping media services bind into their player's virtual amp. These
+      autobind when both drivers are in the project.
+    -->
+    <connection proxybindingid="5001">
+      <id>1</id>
+      <facing>6</facing>
+      <type>1</type>
+      <connectionname>Kodi Movies Link</connectionname>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>False</linelevel>
+      <idautobind>73103</idautobind>
+      <classes>
+        <class><classname>LINK_OSKODI_MOVIES</classname><autobind>True</autobind></class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>2001</id>
+      <type>5</type>
+      <connectionname>Kodi Movies AV</connectionname>
+      <consumer>False</consumer>
+      <linelevel>False</linelevel>
+      <idautobind>73104</idautobind>
+      <classes>
+        <class><classname>RF_OSKODI_MOVIES</classname><autobind>True</autobind></class>
+      </classes>
+    </connection>
+    <!-- Driver-to-driver control link to the Kodi player driver. -->
+    <connection>
+      <id>3900</id>
+      <facing>6</facing>
+      <type>1</type>
+      <connectionname>Kodi Player</connectionname>
+      <consumer>True</consumer>
+      <linelevel>False</linelevel>
+      <idautobind>73105</idautobind>
+      <classes>
+        <class><classname>OSKODI_PLAYER_LINK</classname><autobind>True</autobind></class>
+      </classes>
+    </connection>
+  </connections>
+
+  <config>
+    <documentation file="www/documentation.html"/>
+    <script file="driver.lua"/>
+
+    <actions>
+      <action><name>Refresh Library</name><command>RefreshLibrary</command></action>
+      <action><name>Re-link to Kodi Player</name><command>Relink</command></action>
+    </actions>
+
+    <events>
+      <event><id>1</id><name>Movie Selected</name><description>A movie was picked to play from a Navigator or Halo</description></event>
+    </events>
+
+    <properties>
+      <property>
+        <name>Driver Version</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default></default>
+      </property>
+      <property>
+        <name>Kodi Player</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Not linked</default>
+      </property>
+      <property>
+        <name>Library Status</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>Not loaded</default>
+      </property>
+      <property>
+        <name>Movie Count</name>
+        <type>STRING</type>
+        <readonly>true</readonly>
+        <default>0</default>
+      </property>
+      <property>
+        <name>Movie Tap Action</name>
+        <type>LIST</type>
+        <default>Play Movie</default>
+        <items><item>Play Movie</item><item>Show Details</item></items>
+      </property>
+      <property>
+        <name>Resume Behavior</name>
+        <type>LIST</type>
+        <default>Use Kodi Driver Setting</default>
+        <items><item>Use Kodi Driver Setting</item><item>Always Resume</item><item>Always Start From Beginning</item></items>
+      </property>
+      <property>
+        <name>Default Sort</name>
+        <type>LIST</type>
+        <default>Title</default>
+        <items><item>Title</item><item>Year (Newest First)</item><item>Date Added (Newest First)</item><item>Rating</item></items>
+      </property>
+      <property>
+        <name>List Subtitle</name>
+        <type>LIST</type>
+        <default>Year, Runtime and Plot</default>
+        <items><item>Year, Runtime and Plot</item><item>Year, Runtime and Genre</item><item>Year and Runtime</item><item>Plot</item><item>Genre</item></items>
+      </property>
+      <property>
+        <name>Hide Watched Movies</name>
+        <type>LIST</type>
+        <default>OFF</default>
+        <items><item>OFF</item><item>ON</item></items>
+      </property>
+      <property>
+        <name>Show Watched Marker</name>
+        <type>LIST</type>
+        <default>ON</default>
+        <items><item>ON</item><item>OFF</item></items>
+      </property>
+      <property>
+        <name>Recently Added Count</name>
+        <type>LIST</type>
+        <default>50</default>
+        <items><item>25</item><item>50</item><item>100</item><item>200</item></items>
+      </property>
+      <property>
+        <name>Details Image</name>
+        <type>LIST</type>
+        <default>Poster</default>
+        <items><item>Poster</item><item>Fanart</item></items>
+      </property>
+      <property>
+        <name>Artwork Source</name>
+        <type>LIST</type>
+        <default>Internet When Available</default>
+        <items><item>Internet When Available</item><item>Kodi Web Server Only</item></items>
+      </property>
+      <property>
+        <name>Send Kodi Login With Artwork</name>
+        <type>LIST</type>
+        <default>ON</default>
+        <items><item>ON</item><item>OFF</item></items>
+      </property>
+      <property>
+        <name>Auto Refresh (minutes)</name>
+        <type>LIST</type>
+        <default>60</default>
+        <items><item>0</item><item>30</item><item>60</item><item>180</item><item>720</item></items>
+      </property>
+      <property>
+        <name>Debug Mode</name>
+        <type>LIST</type>
+        <default>OFF</default>
+        <items><item>OFF</item><item>ON</item></items>
+      </property>
+    </properties>
+  </config>
+</devicedata>
