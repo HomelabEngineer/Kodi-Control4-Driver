@@ -3,7 +3,6 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Control4 OS](https://img.shields.io/badge/Control4%20OS-3.1%2B-orange.svg)
 ![Kodi](https://img.shields.io/badge/Kodi-19%2B-17b2e7.svg)
-![Status](https://img.shields.io/badge/status-hardware%20validation%20pending-yellow.svg)
 
 Two open-source Control4 drivers for [Kodi](https://kodi.tv):
 
