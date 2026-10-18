@@ -1,8 +1,0 @@
-*.lua text eol=lf
-*.xml text eol=lf
-*.txt text eol=lf
-*.c4z binary
-*.jpg binary
-*.png binary
-* text=auto
-*.xml text eol=lf
