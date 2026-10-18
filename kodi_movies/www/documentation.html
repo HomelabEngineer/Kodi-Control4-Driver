@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Kodi Movies (Open Source)</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;line-height:1.5;margin:24px;max-width:46em;color:#222}
+h1{font-size:1.5em}h2{font-size:1.15em;margin-top:1.6em;border-bottom:1px solid #ddd}
+code{background:#f3f3f3;padding:1px 4px;border-radius:3px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #ddd;padding:4px 8px;text-align:left;vertical-align:top}
+</style></head>
+<body>
+<h1>Kodi Movies (Open Source)</h1>
+<p>Shows the movie library of a linked <b>Kodi (Open Source)</b> player on Control4 Navigators (T3/T4/T5 touchscreens, the Control4 app) and Halo remotes &mdash; posters, titles, year, runtime, plot and more. Tap a movie and the room turns on with Kodi as the source, then the movie starts.</p>
+
+<h2>Requirements</h2>
+<ul>
+<li>Control4 OS 3.1 or later (for the details screen); the Kodi (Open Source) driver installed and connected.</li>
+<li>Kodi's web server enabled (Settings &rarr; Services &rarr; Control &rarr; Allow remote control via HTTP). Port, username and password are set on the Kodi driver, not here.</li>
+</ul>
+
+<h2>Setup</h2>
+<ol>
+<li>Add <b>Kodi Movies</b> to the project (one per Kodi player; it serves every room).</li>
+<li>Its connections usually bind to the Kodi driver automatically. If <b>Kodi Player</b> shows "Not linked", bind in Connections:
+  <ul>
+  <li><b>Kodi Movies &rarr; Kodi Player</b> &rarr; Kodi driver <b>Kodi Library Control</b></li>
+  <li><b>Kodi Movies Link</b> and <b>Kodi Movies AV</b> &rarr; <b>Kodi Virtual Switcher</b> inputs of the same names (this gives the service a route to the rooms Kodi is in).</li>
+  </ul></li>
+<li>Refresh Navigators. <b>Kodi Movies</b> appears in the rooms where Kodi is a video source.</li>
+</ol>
+
+<h2>On the Navigator / Halo</h2>
+<table>
+<tr><th>Tab</th><th>Shows</th></tr>
+<tr><td>Movies</td><td>The whole library (sorted per <b>Default Sort</b>), paged so large libraries stay fast.</td></tr>
+<tr><td>Recent</td><td>Recently added movies.</td></tr>
+<tr><td>Continue</td><td>Movies with a resume point, most recently watched first, with time left.</td></tr>
+<tr><td>Genres</td><td>Every genre, then its movies.</td></tr>
+<tr><td>More</td><td>Unwatched, Collections (movie sets), By Year, Top Rated, Surprise Me (25 random unwatched picks), All Movies.</td></tr>
+</table>
+<p>Tapping a movie plays it (or opens its details, per <b>Movie Tap Action</b>). The item menu offers <i>Play</i>, <i>Resume</i>, <i>Play From Beginning</i>, <i>Details</i> and <i>Mark as Watched/Unwatched</i>. The details screen shows the poster or fanart, year, rating and certification, runtime, genres, director, tagline and full plot.</p>
+
+<h2>Properties</h2>
+<table>
+<tr><th>Property</th><th>Notes</th></tr>
+<tr><td>Movie Tap Action</td><td>Play Movie (default) or Show Details.</td></tr>
+<tr><td>Resume Behavior</td><td>Use Kodi Driver Setting, Always Resume, or Always Start From Beginning (for the plain <i>Play</i> action).</td></tr>
+<tr><td>Default Sort</td><td>Title, Year, Date Added, or Rating.</td></tr>
+<tr><td>List Subtitle</td><td>What appears under each title: year/runtime/plot (default), year/runtime/genre, year/runtime, plot, or genre.</td></tr>
+<tr><td>Hide Watched Movies / Show Watched Marker</td><td>Filter or mark watched titles in the Movies tab.</td></tr>
+<tr><td>Recently Added Count</td><td>25&ndash;200.</td></tr>
+<tr><td>Details Image</td><td>Poster or Fanart.</td></tr>
+<tr><td>Artwork Source</td><td><b>Internet When Available</b>: scraped TMDB art is loaded straight from TMDB at a Halo-friendly size, which also works away from home; other art comes from Kodi. <b>Kodi Web Server Only</b>: everything comes from Kodi.</td></tr>
+<tr><td>Send Kodi Login With Artwork</td><td>Adds the Kodi username/password to Kodi artwork URLs, for Kodi installs that require a login.</td></tr>
+<tr><td>Auto Refresh (minutes)</td><td>Periodic full reload. The library also updates live: watched state, resume points, new and removed movies follow Kodi's library notifications.</td></tr>
+<tr><td>Status (read-only)</td><td>Kodi Player, Library Status, Movie Count.</td></tr>
+</table>
+
+<h2>Programming</h2>
+<p><b>Event:</b> Movie Selected. <b>Variable:</b> LAST_MOVIE_SELECTED. <b>Actions:</b> Refresh Library, Re-link to Kodi Player.</p>
+
+<h2>Troubleshooting</h2>
+<ul>
+<li><b>Posters missing:</b> each Navigator loads artwork itself. With <i>Kodi Web Server Only</i> (or for local/NAS artwork) every touchscreen, phone and Halo must be able to reach Kodi's web server port.</li>
+<li><b>"Couldn't load the Kodi library" / HTTP 401:</b> check the web server port, username and password on the Kodi driver.</li>
+<li><b>Kodi Movies doesn't appear in a room:</b> confirm the Link and AV bindings to the Kodi Virtual Switcher, and that Kodi is a video source in that room.</li>
+</ul>
+
+<p style="color:#666;margin-top:2em">Open source (MIT). Not affiliated with or endorsed by the Kodi Foundation or Snap One.</p>
+</body>
+</html>
